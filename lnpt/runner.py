@@ -10,7 +10,7 @@ def graphify(nodes):
         for p in n.parents:
             p.children.append(n)
         print(n)
-    
+
 
 def get_roots(nodes):
     roots = []
@@ -19,11 +19,10 @@ def get_roots(nodes):
             roots.append(n)
 
     return roots
-        
+
 
 def enums(s, prefix):
     prefix += [s]
-    print("Adding s to prefix: ", s, prefix)
 
     # No children? We must be a terminal state, so the prefix fully
     # describes how we got here.
@@ -39,8 +38,7 @@ def enums(s, prefix):
 
 
 def execute(path: List[Node]):
-    """Run a single path through the protocol DAG.
-    """
+    """Run a single path through the protocol DAG."""
     ctx: Dict[str, str] = {}
     for n in path:
         print(f"Executing step {n}")
