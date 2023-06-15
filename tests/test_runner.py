@@ -2,17 +2,17 @@ import lnpt
 from rich.pretty import pprint
 
 
-def test_simple():
+def test_simple() -> None:
     @lnpt.root(parents=[])
-    def start(a):
+    def start(a: lnpt.Context) -> None:
         print("Start")
 
     @lnpt.step(parents=[start])
-    def step1(a):
+    def step1(a: lnpt.Context) -> None:
         print("Step1")
 
     @lnpt.step(parents=[start, step1])
-    def step2(a):
+    def step2(a: lnpt.Context) -> None:
         print("step2")
 
     # Check that all nodes are included:

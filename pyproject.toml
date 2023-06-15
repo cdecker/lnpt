@@ -6,6 +6,10 @@ authors = ["Christian Decker <decker@blockstream.com>"]
 license = "MIT"
 readme = "README.md"
 
+include = [
+    { path = "lnpt" },
+]
+
 [tool.poetry.dependencies]
 python = "^3.7"
 rich = "^13.4.2"

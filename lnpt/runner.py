@@ -1,18 +1,17 @@
 from lnpt.decorators import nodes
 from rich.pretty import pprint
 from typing import List, Dict
-from lnpt.model import Node
+from lnpt.model import Node, Callback, Context
 
 
-def graphify(nodes):
+def graphify(nodes: Dict[Callback, Node]) -> None:
     # We start by collecting all the children for each node.
     for _, n in nodes.items():
         for p in n.parents:
             p.children.append(n)
-        print(n)
 
 
-def get_roots(nodes):
+def get_roots(nodes: Dict[Callback, Node]) -> List[Node]:
     roots = []
     for _, n in nodes.items():
         if n.parents == []:
@@ -21,7 +20,7 @@ def get_roots(nodes):
     return roots
 
 
-def enums(s, prefix):
+def enums(s: Node, prefix: List[Node]) -> List[List[Node]]:
     prefix += [s]
 
     # No children? We must be a terminal state, so the prefix fully
@@ -37,16 +36,16 @@ def enums(s, prefix):
     return collected
 
 
-def execute(path: List[Node]):
+def execute(path: List[Node]) -> None:
     """Run a single path through the protocol DAG."""
-    ctx: Dict[str, str] = {}
+    ctx = Context()
     for n in path:
         print(f"Executing step {n}")
         n.func(ctx)
         print(f"Step {n} returned")
 
 
-def run():
+def run() -> None:
     graphify(nodes)
     roots = get_roots(nodes)
     paths: List[List[Node]] = enums(roots[0], [])

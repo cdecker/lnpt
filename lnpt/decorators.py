@@ -1,12 +1,14 @@
-from lnpt.model import Node
-from typing import Dict, Callable, List
+from lnpt.model import Node, Context, Callback
+from typing import Dict, Callable, List, Any
+
+nodes: Dict[Callback, Node] = {}  # func -> Node
 
 
-nodes: Dict[Callable, Node] = {}  # func -> Node
+DecoratedCallback = Callable[[Callback], Callback]
 
 
-def root(parents=List[Callable], *args, **kwargs):
-    def inner(func):
+def root(parents: List[Callback]) -> DecoratedCallback:
+    def inner(func: Callback) -> Callback:
         global nodes
 
         pars = [nodes[p] for p in parents]
@@ -17,8 +19,8 @@ def root(parents=List[Callable], *args, **kwargs):
     return inner
 
 
-def step(parents: List[Callable], *args, **kwargs):
-    def inner(func):
+def step(parents: List[Callback]) -> DecoratedCallback:
+    def inner(func: Callback) -> Callback:
         global nodes
         pars = [nodes[p] for p in parents]
         nodes[func] = Node(name=func.__name__, func=func, parents=pars, children=[])
@@ -27,8 +29,8 @@ def step(parents: List[Callable], *args, **kwargs):
     return inner
 
 
-def leaf(parents: List[Callable], *args, **kwargs):
-    def inner(func):
+def leaf(parents: List[Callback]) -> DecoratedCallback:
+    def inner(func: Callback) -> Callback:
         global nodes
         pars = [nodes[p] for p in parents]
         nodes[func] = Node(name=func.__name__, func=func, parents=pars, children=[])
